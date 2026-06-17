@@ -1,65 +1,97 @@
-import Image from "next/image";
+import Hero from "@/components/Hero";
+import BrandCard from "@/components/BrandCard";
+import Disclaimer from "@/components/Disclaimer";
+import About from "@/components/About";
+import MobileModal from "@/components/MobileModal";
+import { brands } from "@/app/data/brands";
+import { Suspense } from "react";
 
-export default function Home() {
+interface PageProps {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default async function Home({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const gclid = typeof params.gclid === "string" ? params.gclid : undefined;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="flex flex-col min-h-screen bg-[#020a0a]">
+      <Suspense>
+        <MobileModal />
+      </Suspense>
+      
+      <Hero />
+      
+      <section id="brands" className="py-32 relative">
+        {/* Background Accents */}
+        <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_0%_0%,rgba(0,191,165,0.05),transparent_40%)] pointer-events-none" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-8">
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-[2px] w-12 bg-[#00bfa5]" />
+                <span className="text-[10px] font-black text-[#00bfa5] uppercase tracking-[0.4em]">Verified Rankings</span>
+              </div>
+              <h2 className="text-4xl md:text-6xl font-black text-white mb-6 font-orbitron uppercase tracking-tighter">
+                TOP 10 <span className="text-[#00bfa5]">UK</span> OPERATORS
+              </h2>
+              <p className="text-white/40 font-bold text-sm uppercase tracking-widest leading-relaxed">
+                Our engine analyzed 50+ licensed operators using 20+ data points to identify the current market leaders.
+              </p>
+            </div>
+            <div className="text-right hidden md:block">
+              <div className="text-[10px] text-white/20 uppercase tracking-[0.3em] mb-3 font-black">Data Refresh</div>
+              <div className="inline-flex items-center gap-3 bg-white/5 px-6 py-3 rounded-xl border border-[#00bfa5]/20">
+                <span className="w-2 h-2 rounded-full bg-[#ff8c00] animate-pulse" />
+                <span className="text-white font-black text-xs uppercase tracking-[0.2em]">JUNE 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {brands.map((brand, index) => (
+              <BrandCard 
+                key={brand.id} 
+                brand={brand} 
+                rank={index + 1} 
+                gclid={gclid} 
+              />
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <Disclaimer />
+      
+      <About />
+      
+      <section id="guide" className="py-32 bg-[#010505] relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#00bfa5]/5 rounded-full blur-[120px] pointer-events-none" />
+        
+        <div className="container mx-auto px-4 max-w-5xl relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-white mb-6 font-orbitron uppercase tracking-tighter">THE METHODOLOGY</h2>
+            <div className="h-1 w-20 bg-[#00bfa5] mx-auto mb-10" />
+            <p className="text-lg text-white/40 font-medium leading-relaxed max-w-3xl mx-auto">
+              We don&apos;t just list sites; we stress-test them. Our 24-hour verification cycle ensures every brand on this list maintains the highest standards of security and speed.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12 mt-20">
+            {[
+              { val: "50+", label: "SITES AUDITED" },
+              { val: "100%", label: "UKGC COMPLIANT" },
+              { val: "24H", label: "PAYOUT TARGET" }
+            ].map((stat, i) => (
+              <div key={i} className="brand-card-bg p-8 rounded-2xl text-center group hover:border-[#00bfa5]/50 transition-colors">
+                <div className="text-[#00bfa5] text-5xl font-black mb-3 font-orbitron group-hover:text-[#ff8c00] transition-colors">{stat.val}</div>
+                <div className="text-[10px] uppercase tracking-[0.4em] font-black text-white/30">{stat.label}</div>
+              </div>
+            ))}
+          </div>
         </div>
-      </main>
+      </section>
     </div>
   );
 }
