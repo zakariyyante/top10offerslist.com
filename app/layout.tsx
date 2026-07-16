@@ -9,8 +9,8 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
 
-const GA_MEASUREMENT_ID = "AW-18039163248"; // Updated with user's ID
-const CONVERSION_LABEL = "XXXXXXXXXXXX"; // Replace with actual label if provided
+const GA_MEASUREMENT_ID = "AW-18039163248";
+const CONVERSION_LABEL = "ekbDCIfBoNEcEPCS35lD";
 
 export const metadata: Metadata = {
   title: "Top 10 Betting Sites UK | Best Bonuses & Reviews 2026",
@@ -43,11 +43,15 @@ export default function RootLayout({
             function gtag_report_conversion(url) {
               var callback = function () {
                 if (typeof(url) != 'undefined') {
-                  // window.location = url;
+                  // In a SPA, we might want to handle navigation differently
+                  // but we follow the provided snippet's logic structure
+                  window.location = url;
                 }
               };
               gtag('event', 'conversion', {
                   'send_to': '${GA_MEASUREMENT_ID}/${CONVERSION_LABEL}',
+                  'value': 1.0,
+                  'currency': 'EUR',
                   'event_callback': callback
               });
               return false;

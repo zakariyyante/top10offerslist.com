@@ -29,10 +29,13 @@ export default function BrandCard({ brand, rank, gclid }: BrandCardProps) {
   const handleAction = (e: React.MouseEvent) => {
     e.stopPropagation();
     track("Brand Click", { brand: brand.name });
+    
     if (window.gtag_report_conversion) {
+      // The gtag_report_conversion function provided handles window.location redirect
       window.gtag_report_conversion(finalUrl);
+    } else {
+      window.open(finalUrl, "_blank", "noopener,noreferrer");
     }
-    window.open(finalUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
